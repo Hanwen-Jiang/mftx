@@ -314,6 +314,31 @@ select {
   --button-height: 2rem;
 }
 
+/* The start/stop receiver button is one size smaller than the rest. */
+.mftx-titlebar .mftx-peer-toggle {
+  --button-height: 1.75rem;
+  min-height: 1.75rem;
+  height: 1.75rem;
+  padding-inline: 0.625rem;
+  font-size: 0.8125rem;
+  gap: 0.25rem;
+}
+
+/* Segmented control (theme mode: auto / light / dark). */
+.mftx-segment {
+  color: var(--muted);
+}
+
+.mftx-segment:not([data-active="true"]):hover {
+  color: var(--foreground);
+}
+
+.mftx-segment[data-active="true"] {
+  background: var(--surface);
+  color: var(--foreground);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
 .mftx-aside-trigger {
   display: inline-flex;
   align-items: center;

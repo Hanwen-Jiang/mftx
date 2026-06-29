@@ -1,6 +1,6 @@
 import {create} from "zustand";
 
-import {applyTheme, getInitialTheme, type Theme} from "./theme";
+import {applyThemeMode, getInitialThemeMode, type ThemeMode} from "./theme";
 import type {
   ActiveTransfer,
   Activity,
@@ -14,7 +14,7 @@ type View = "transfer" | "inbox" | "peers" | "settings";
 
 const AUTO_START_KEY = "mftx-auto-start-peer";
 const ACTIVITIES_KEY = "mftx-activities";
-const MAX_ACTIVITIES = 100;
+const MAX_ACTIVITIES = 500;
 
 /** Read the "auto-start receiver on launch" preference (defaults to on). */
 function getInitialAutoStart(): boolean {
@@ -59,12 +59,12 @@ type AppStore = {
   selectedPeerAddr: string | null;
   manualAddr: string;
   selectedView: View;
-  theme: Theme;
+  themeMode: ThemeMode;
   autoStartPeer: boolean;
   busy: boolean;
   discovering: boolean;
   message: string | null;
-  toggleTheme: () => void;
+  setThemeMode: (mode: ThemeMode) => void;
   setAutoStartPeer: (value: boolean) => void;
   setState: (state: AppState) => void;
   setPeers: (peers: Peer[]) => void;
@@ -143,17 +143,15 @@ export const useAppStore = create<AppStore>((set) => ({
   selectedPeerAddr: null,
   manualAddr: "",
   selectedView: "transfer",
-  theme: getInitialTheme(),
+  themeMode: getInitialThemeMode(),
   autoStartPeer: getInitialAutoStart(),
   busy: false,
   discovering: false,
   message: null,
-  toggleTheme: () =>
-    set((current) => {
-      const theme: Theme = current.theme === "dark" ? "light" : "dark";
-      applyTheme(theme);
-      return {theme};
-    }),
+  setThemeMode: (themeMode) => {
+    applyThemeMode(themeMode);
+    set({themeMode});
+  },
   setAutoStartPeer: (autoStartPeer) => {
     persistAutoStart(autoStartPeer);
     set({autoStartPeer});

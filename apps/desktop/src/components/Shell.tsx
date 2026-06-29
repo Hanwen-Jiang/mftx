@@ -1,6 +1,6 @@
 import {Button, Tooltip} from "@heroui/react";
 import {AppLayout, Navbar, Sidebar} from "@heroui-pro/react";
-import {Inbox, Moon, PanelRight, Power, RadioTower, Send, Settings, Sun, UsersRound} from "lucide-react";
+import {Inbox, PanelRight, Power, RadioTower, Send, Settings, UsersRound} from "lucide-react";
 import type {ReactNode} from "react";
 
 import {startPeer, stopPeer} from "../lib/api";
@@ -35,8 +35,6 @@ export function Shell({children}: ShellProps) {
   const setMessage = useAppStore((store) => store.setMessage);
   const busy = useAppStore((store) => store.busy);
   const setBusy = useAppStore((store) => store.setBusy);
-  const theme = useAppStore((store) => store.theme);
-  const toggleTheme = useAppStore((store) => store.toggleTheme);
   const incomingCount = useAppStore((store) => store.incomingRequests.length);
   const running = Boolean(state?.peerRunning);
 
@@ -145,30 +143,17 @@ export function Shell({children}: ShellProps) {
             <Tooltip.Trigger>
               <Button
                 aria-label={running ? "停止接收" : "启动接收"}
+                className="mftx-peer-toggle"
                 isDisabled={busy}
                 size="sm"
                 variant={running ? "danger-soft" : "primary"}
                 onPress={togglePeer}
               >
-                <Power className="size-4" />
+                <Power className="size-3.5" />
                 {running ? "停止" : "启动"}
               </Button>
             </Tooltip.Trigger>
             <Tooltip.Content>{running ? "停止接收 peer" : "启动接收 peer"}</Tooltip.Content>
-          </Tooltip>
-          <Tooltip>
-            <Tooltip.Trigger>
-              <Button
-                isIconOnly
-                aria-label={theme === "dark" ? "切换到浅色" : "切换到深色"}
-                size="sm"
-                variant="ghost"
-                onPress={toggleTheme}
-              >
-                {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
-              </Button>
-            </Tooltip.Trigger>
-            <Tooltip.Content>{theme === "dark" ? "切换到浅色" : "切换到深色"}</Tooltip.Content>
           </Tooltip>
           <Tooltip>
             <Tooltip.Trigger>

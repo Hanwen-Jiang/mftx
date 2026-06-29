@@ -4,11 +4,15 @@ import {
   ChevronDown,
   FolderOpen,
   KeyRound,
+  Monitor,
+  Moon,
   Plus,
   Power,
   Radar,
   Save,
   ShieldCheck,
+  Sun,
+  SunMoon,
   Trash2,
   X,
 } from "lucide-react";
@@ -26,6 +30,8 @@ export function SettingsPanel() {
   const setState = useAppStore((store) => store.setState);
   const autoStartPeer = useAppStore((store) => store.autoStartPeer);
   const setAutoStartPeer = useAppStore((store) => store.setAutoStartPeer);
+  const themeMode = useAppStore((store) => store.themeMode);
+  const setThemeMode = useAppStore((store) => store.setThemeMode);
   const busy = useAppStore((store) => store.busy);
   const setBusy = useAppStore((store) => store.setBusy);
   const message = useAppStore((store) => store.message);
@@ -127,6 +133,39 @@ export function SettingsPanel() {
           </div>
         </div>
         <Switch isSelected={autoStartPeer} onChange={setAutoStartPeer} aria-label="打开应用时自动启动接收" />
+      </section>
+
+      <section className="surface-card flex flex-wrap items-center justify-between gap-4 p-5">
+        <div className="flex min-w-0 items-start gap-3">
+          <div className="flex size-9 shrink-0 items-center justify-center rounded-2xl bg-surface-secondary text-muted">
+            <SunMoon className="size-4" />
+          </div>
+          <div className="min-w-0">
+            <h2 className="text-sm font-semibold">外观</h2>
+            <p className="text-xs text-muted">跟随系统、浅色或深色。</p>
+          </div>
+        </div>
+        <div className="mftx-segmented inline-flex shrink-0 rounded-xl bg-surface-secondary p-0.5">
+          {(
+            [
+              ["auto", "自动", Monitor],
+              ["light", "浅色", Sun],
+              ["dark", "深色", Moon],
+            ] as const
+          ).map(([mode, label, Icon]) => (
+            <button
+              key={mode}
+              type="button"
+              aria-pressed={themeMode === mode}
+              className="mftx-segment flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors"
+              data-active={themeMode === mode ? "true" : "false"}
+              onClick={() => setThemeMode(mode)}
+            >
+              <Icon className="size-3.5" />
+              {label}
+            </button>
+          ))}
+        </div>
       </section>
 
       <section className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_340px]">

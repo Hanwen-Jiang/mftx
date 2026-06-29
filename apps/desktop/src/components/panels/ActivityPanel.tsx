@@ -49,9 +49,9 @@ export function ActivityPanel() {
                   <StatusIcon status={activity.status} />
                   <div className="flex min-w-0 flex-1 flex-col">
                     <div className="flex min-w-0 items-center gap-2">
-                      <ListView.Title>
+                      <span className="min-w-0 flex-1 truncate text-sm font-medium leading-5">
                         {directionLabel(activity.direction)} {activity.peer}
-                      </ListView.Title>
+                      </span>
                       <StatusBadge status={activity.status} />
                     </div>
                     <ListView.Description>
@@ -88,7 +88,12 @@ function StatusIcon({status}: {status: "running" | "finished" | "failed" | "expi
 function StatusBadge({status}: {status: "running" | "finished" | "failed" | "expired" | "rejected"}) {
   const failed = status === "failed" || status === "expired" || status === "rejected";
   return (
-    <Badge color={failed ? "danger" : status === "finished" ? "success" : "warning"} size="sm" variant="soft">
+    <Badge
+      className="shrink-0 self-center"
+      color={failed ? "danger" : status === "finished" ? "success" : "warning"}
+      size="sm"
+      variant="soft"
+    >
       {status === "failed"
         ? "失败"
         : status === "expired"
