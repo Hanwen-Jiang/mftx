@@ -85,7 +85,7 @@ body {
    outer radius so the inner curve matches the window's outer corners.
    The window's other corners are rounded by the OS already. */
 :root {
-  --mftx-window-radius: 8px; /* Windows 11 native window corner radius */
+  --mftx-window-radius: 12px; /* Windows 11 native window corner radius */
 }
 .is-mac {
   --mftx-window-radius: 20px; /* macOS: a softer, more pronounced inner curve */
