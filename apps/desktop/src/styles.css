@@ -66,6 +66,39 @@ body {
   background-color: oklch(0.963 0 0);
 }
 
+/* Inner corner between the sidebar (侧板) and the main column (主板). The main
+   column is rounded on the side that faces the sidebar so the inset content
+   reads as a sheet — and the radius is set to each platform's native *window*
+   outer radius so the inner curve matches the window's outer corners.
+   The window's other corners are rounded by the OS already. */
+:root {
+  --mftx-window-radius: 8px; /* Windows 11 native window corner radius */
+}
+.is-mac {
+  --mftx-window-radius: 10px; /* macOS native window radius (== windowEffects.radius) */
+}
+
+/* clip-path (not border-radius + overflow) so the rounding also clips the
+   sticky, z-indexed navbar header — a positioned z-indexed child escapes an
+   ancestor's border-radius overflow clip, leaving its corner square. The round
+   values are TL TR BR BL, so only the two sidebar-facing (left) corners curve. */
+.app-layout__body {
+  clip-path: inset(0 round var(--mftx-window-radius) 0 0 var(--mftx-window-radius));
+}
+
+/* Windows (and other non-vibrancy platforms): make the main column an opaque
+   white sheet and paint the canvas *behind* it grey, so the rounded inner corner
+   reveals grey — the Windows analogue of macOS's glass showing through. macOS
+   overrides the body to transparent below so the vibrancy shows instead. */
+.is-win .app-layout__body {
+  background-color: var(--surface);
+}
+
+.is-win.light .sidebar__provider,
+.is-win [data-theme="light"] .sidebar__provider {
+  background-color: oklch(0.963 0 0);
+}
+
 /* macOS: native window vibrancy ("sidebar" material) shows through the
    transparent sidebar; the content area stays opaque so the frosted blur is
    confined to the sidebar (the native Finder/Mail look). */
@@ -87,7 +120,9 @@ body {
    translucent so the vibrancy shows through — solid pills look flat on frost.
    Kept subtle (Codex-style): a soft highlight, never a heavy grey block. */
 .is-mac .sidebar__menu-item[data-current="true"] .sidebar__menu-item-content {
-  background-color: color-mix(in srgb, var(--foreground) 9%, transparent);
+  /* Pure-white tint at a low alpha — a faint frost highlight that lets the
+     vibrancy show through, in both light and dark. */
+  background-color: color-mix(in srgb, #fff 4%, transparent);
 }
 
 .is-mac .sidebar__menu-item:hover .sidebar__menu-item-content,

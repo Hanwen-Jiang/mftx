@@ -116,8 +116,8 @@ export async function discoverPeers(seconds = 3): Promise<Peer[]> {
   if (!isTauri) {
     return [
       {
-        deviceId: "haven-demo-device",
-        deviceName: "Haven-Mac",
+        deviceId: "hanwen-demo-device",
+        deviceName: "Hanwen-Mac",
         sessionId: "demo-peer",
         addr: "192.168.1.12:48151",
         port: 48151,
