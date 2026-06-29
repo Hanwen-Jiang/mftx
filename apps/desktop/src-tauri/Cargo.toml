@@ -1,0 +1,39 @@
+[package]
+name = "mft-desktop"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+
+[lib]
+name = "mft_desktop_lib"
+crate-type = ["rlib"]
+doctest = false
+test = false
+
+[[bin]]
+name = "mft-desktop"
+path = "src/main.rs"
+test = false
+
+[build-dependencies]
+tauri-build = { version = "2.5", features = [] }
+
+[dependencies]
+anyhow.workspace = true
+hostname.workspace = true
+mft-core = { path = "../../../crates/core" }
+mft-protocol = { path = "../../../crates/protocol" }
+serde.workspace = true
+serde_json.workspace = true
+# `macos-private-api` powers the macOS vibrancy sidebar (transparent window +
+# windowEffects). It must stay UNCONDITIONAL here: tauri-build's allowlist check
+# only reads this `[dependencies]` table (not target-specific ones), so scoping
+# it per-OS makes the macOS check fail. The matching `macOSPrivateApi: true` is
+# set in the BASE tauri.conf.json so every platform's merged config agrees with
+# the feature; the feature's code is macOS-gated, so it's a harmless no-op on
+# Windows/Linux at compile and runtime.
+tauri = { version = "2.11", features = ["tray-icon", "macos-private-api"] }
+tauri-plugin-dialog = "2.4"
+tauri-plugin-notification = "2.3"
+tokio.workspace = true
+uuid.workspace = true

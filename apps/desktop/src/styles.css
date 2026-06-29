@@ -1,0 +1,453 @@
+@import "tailwindcss";
+@import "@heroui/styles/css";
+@import "@heroui-pro/react/css";
+
+@source "../**/*.{ts,tsx}";
+
+:root {
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--background);
+  color: var(--foreground);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-surface-tertiary: var(--surface-tertiary);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-separator: var(--separator);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow: hidden;
+}
+
+/* Light theme: pure-white page background + lower-contrast (lighter) greys.
+   Scoped to light only so dark mode keeps HeroUI's defaults. */
+.light,
+[data-theme="light"] {
+  --background: oklch(1 0 0); /* pure white page (was 0.9702) */
+  --surface-secondary: oklch(0.976 0 0); /* lighter grey panels (was 0.9524) */
+  --surface-tertiary: oklch(0.965 0 0); /* lighter (was ~0.93) */
+  --separator: oklch(0.93 0 0); /* softer dividers/borders */
+}
+
+/* Sidebar reads as a distinct grey panel against the white content area
+   (the classic macOS master/detail look). Theme-aware so dark mode stays dark. */
+.sidebar {
+  background-color: var(--surface-secondary);
+}
+
+.light .sidebar,
+[data-theme="light"] .sidebar {
+  background-color: oklch(0.963 0 0);
+}
+
+/* macOS: native window vibrancy ("sidebar" material) shows through the
+   transparent sidebar; the content area stays opaque so the frosted blur is
+   confined to the sidebar (the native Finder/Mail look). */
+.is-mac,
+.is-mac body,
+.is-mac #root,
+.is-mac .sidebar__provider,
+.is-mac .app-layout__body,
+.is-mac .sidebar,
+.is-mac .light .sidebar {
+  background: transparent;
+}
+
+.is-mac .app-layout__main {
+  background: var(--surface);
+}
+
+/* macOS glass: sidebar fills (selected/hover items) stay light-touch and
+   translucent so the vibrancy shows through — solid pills look flat on frost.
+   Kept subtle (Codex-style): a soft highlight, never a heavy grey block. */
+.is-mac .sidebar__menu-item[data-current="true"] .sidebar__menu-item-content {
+  background-color: color-mix(in srgb, var(--foreground) 9%, transparent);
+}
+
+.is-mac .sidebar__menu-item:hover .sidebar__menu-item-content,
+.is-mac .sidebar__menu-item[data-hovered="true"] .sidebar__menu-item-content {
+  background-color: color-mix(in srgb, var(--foreground) 5%, transparent);
+}
+
+/* The slim status row stays unfilled on glass — Codex-style, text-forward. */
+.is-mac .mftx-sidebar-status {
+  background: transparent;
+}
+
+/* Pin the AppLayout to the viewport so panel content scrolls inside the
+   content area instead of growing the page (which body overflow:hidden would
+   otherwise clip — leaving cards cut off with no scrollbar). */
+.sidebar__provider {
+  height: 100%;
+  min-height: 0;
+}
+
+.app-layout__main {
+  min-height: 0;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.drag-region {
+  -webkit-app-region: drag;
+}
+
+.no-drag {
+  -webkit-app-region: no-drag;
+}
+
+/* Custom frameless-window controls (decorations: false). */
+.mftx-window-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  height: 100%;
+  -webkit-app-region: no-drag;
+}
+
+.mftx-window-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2rem;
+  border-radius: 0.625rem;
+  color: var(--muted);
+  transition:
+    background 120ms ease,
+    color 120ms ease;
+}
+
+.mftx-window-control:hover {
+  background: var(--surface-secondary);
+  color: var(--foreground);
+}
+
+.mftx-window-control:active {
+  background: var(--surface-tertiary);
+}
+
+.mftx-window-control--close:hover {
+  background: var(--danger);
+  color: #fff;
+}
+
+/* Slim, unified top bar. Sync the height on both the navbar and the layout so
+   the sticky offset matches the actual header height (no gap / overlap). */
+.sidebar__provider,
+.navbar,
+.navbar__header {
+  --navbar-height: 3rem;
+}
+
+.mftx-titlebar {
+  min-height: 3rem;
+  gap: 0.5rem;
+}
+
+/* Hide the main content scrollbar visually while keeping scroll behavior. */
+.mftx-content-scroll {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* legacy Edge */
+}
+
+.mftx-content-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.surface-card {
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) * 2);
+  background: var(--surface);
+  box-shadow: var(--surface-shadow);
+}
+
+.subtle-card {
+  border: 1px solid var(--separator);
+  border-radius: calc(var(--radius) * 1.5);
+  background: var(--surface-secondary);
+}
+
+.metric-tile {
+  border-radius: calc(var(--radius) * 1.5);
+  background: var(--surface-secondary);
+  padding: 0.875rem;
+}
+
+.path-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.transfer-panel {
+  container-type: inline-size;
+}
+
+.transfer-panel__grid {
+  align-items: start;
+}
+
+.transfer-target {
+  container-type: inline-size;
+}
+
+@container (min-width: 48rem) {
+  .transfer-panel__grid {
+    grid-template-columns: minmax(0, 1fr) 20rem;
+  }
+}
+
+@container (min-width: 38rem) {
+  .transfer-target__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(13rem, 16rem);
+  }
+}
+
+.mftx-sidebar-footer [data-slot="tooltip-trigger"] {
+  width: 100%;
+}
+
+.mftx-sidebar-footer-button {
+  justify-content: center;
+  width: 100%;
+}
+
+.chip.mftx-sidebar-status-chip {
+  align-items: center;
+  flex-shrink: 0;
+  gap: 0.375rem;
+  min-height: 1.375rem;
+  height: 1.375rem;
+  padding-inline: 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.mftx-sidebar-status-dot {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 999px;
+  background: var(--muted);
+}
+
+.mftx-sidebar-status-dot[data-running="true"] {
+  background: var(--success);
+}
+
+.sidebar[data-collapsible="icon"][data-state="collapsed"] .mftx-sidebar-footer {
+  align-items: center;
+  padding-inline: 0;
+}
+
+.sidebar[data-collapsible="icon"][data-state="collapsed"] .mftx-sidebar-brand {
+  width: 2.25rem;
+  gap: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.sidebar[data-collapsible="icon"][data-state="collapsed"] .mftx-sidebar-status {
+  display: none;
+}
+
+.sidebar[data-collapsible="icon"][data-state="collapsed"] .mftx-sidebar-footer [data-slot="tooltip-trigger"] {
+  width: auto;
+}
+
+.sidebar[data-collapsible="icon"][data-state="collapsed"] .mftx-sidebar-footer-button {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  min-width: 2.25rem;
+  height: 2rem;
+  gap: 0;
+  padding-inline: 0;
+}
+
+.sidebar[data-collapsible="icon"][data-state="collapsed"] .mftx-sidebar-footer-button [data-sidebar="label"] {
+  display: none;
+}
+
+/* ── Top-bar button coherence ───────────────────────────────────────────────
+   Normalize every control in the titlebar to the same compact height/icon size
+   so 启动/停止, theme toggle, and the activity (aside) trigger read as one set. */
+.mftx-titlebar [data-slot="button"],
+.mftx-titlebar button {
+  --button-height: 2rem;
+}
+
+.mftx-aside-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.625rem;
+  color: var(--muted);
+  transition:
+    background 120ms ease,
+    color 120ms ease;
+}
+
+.mftx-aside-trigger:hover {
+  background: var(--surface-secondary);
+  color: var(--foreground);
+}
+
+/* ── Inbox / nav badge ──────────────────────────────────────────────────────*/
+.mftx-nav-badge {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.125rem;
+  height: 1.125rem;
+  padding-inline: 0.3125rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-foreground);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* ── Selectable peer rows (no redundant checkbox) ──────────────────────────── */
+.mftx-peer-row {
+  border: 1px solid transparent;
+  background: transparent;
+}
+
+.mftx-peer-row:hover {
+  background: var(--surface-secondary);
+}
+
+.mftx-peer-row[data-selected="true"] {
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  background: var(--accent-soft, color-mix(in srgb, var(--accent) 12%, transparent));
+}
+
+.is-mac .mftx-peer-row:hover {
+  background: color-mix(in srgb, var(--foreground) 6%, transparent);
+}
+
+.is-mac .mftx-peer-row[data-selected="true"] {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+/* ── Discovery scanning animation ───────────────────────────────────────────*/
+@keyframes mftx-scan-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
+.mftx-scan-icon {
+  animation: mftx-scan-pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes mftx-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.mftx-spin {
+  animation: mftx-spin 0.9s linear infinite;
+}
+
+/* ── Foreground transfer dialog ─────────────────────────────────────────────*/
+.mftx-transfer-dialog-anchor {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 60;
+}
+
+.mftx-transfer-dialog {
+  box-shadow: var(--surface-shadow, 0 12px 32px rgba(0, 0, 0, 0.18));
+}
+
+.mftx-progress-track {
+  position: relative;
+  height: 0.375rem;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--surface-secondary);
+}
+
+.mftx-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--accent);
+  transition: width 200ms ease;
+}
+
+.mftx-progress-track[data-state="finished"] .mftx-progress-fill {
+  width: 100%;
+  background: var(--success);
+}
+
+.mftx-progress-track[data-state="failed"] .mftx-progress-fill {
+  width: 100%;
+  background: var(--danger);
+}
+
+/* Running + no live byte count yet → indeterminate sweep. */
+.mftx-progress-track[data-state="running"][data-determinate="false"] .mftx-progress-fill {
+  width: 35%;
+  animation: mftx-indeterminate 1.2s ease-in-out infinite;
+}
+
+@keyframes mftx-indeterminate {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(320%);
+  }
+}

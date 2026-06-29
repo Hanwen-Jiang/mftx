@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "mftx-desktop",
+      "runtimeExecutable": "E:\\jhw\\mftx-project\\.claude\\dev-preview.cmd",
+      "runtimeArgs": [],
+      "port": 1420
+    }
+  ]
+}

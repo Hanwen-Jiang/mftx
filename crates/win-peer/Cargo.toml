@@ -1,0 +1,16 @@
+[package]
+name = "mft-win-peer"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+hostname.workspace = true
+mft-core = { path = "../core" }
+mft-protocol = { path = "../protocol" }
+rpassword.workspace = true
+serde.workspace = true
+tokio.workspace = true
+uuid.workspace = true
